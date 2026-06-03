@@ -14,6 +14,11 @@ export default function Hero() {
         <p className="font-cormorant italic text-headline text-parchment max-w-2xl mb-12 leading-relaxed">
           The ritual for those who treat their morning cup the way a musician tunes their instrument.
         </p>
+        <div>
+          <button className="px-8 py-4 border border-gold-bright text-gold-bright hover:bg-gold-bright hover:text-obsidian-black transition-colors duration-300 font-inter tracking-[0.2em] uppercase text-caption relative overflow-hidden group">
+            <span className="relative z-10">Experience Obsidian</span>
+          </button>
+        </div>
       </div>
     </section>
   );
