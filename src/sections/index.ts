@@ -1,1 +1,1 @@
-// Export sections here
+export { default as Hero } from "./Hero";
