@@ -1,6 +1,22 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useSpring } from "motion/react";
 export default function Hero() {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const mouseX = useSpring(0, { stiffness: 150, damping: 15 });
+  const mouseY = useSpring(0, { stiffness: 150, damping: 15 });
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!btnRef.current) return;
+    const { left, top, width, height } = btnRef.current.getBoundingClientRect();
+    const x = e.clientX - (left + width / 2);
+    const y = e.clientY - (top + height / 2);
+    mouseX.set(x * 0.2);
+    mouseY.set(y * 0.2);
+  };
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 -top-[20%] w-full h-[120%]">
@@ -15,9 +31,16 @@ export default function Hero() {
           The ritual for those who treat their morning cup the way a musician tunes their instrument.
         </p>
         <div>
-          <button className="px-8 py-4 border border-gold-bright text-gold-bright hover:bg-gold-bright hover:text-obsidian-black transition-colors duration-300 font-inter tracking-[0.2em] uppercase text-caption relative overflow-hidden group">
+          <motion.button
+            ref={btnRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            whileTap={{ scale: 0.95 }}
+            style={{ x: mouseX, y: mouseY }}
+            className="px-8 py-4 border border-gold-bright text-gold-bright hover:bg-gold-bright hover:text-obsidian-black transition-colors duration-300 font-inter tracking-[0.2em] uppercase text-caption relative overflow-hidden group"
+          >
             <span className="relative z-10">Experience Obsidian</span>
-          </button>
+          </motion.button>
         </div>
       </div>
     </section>
