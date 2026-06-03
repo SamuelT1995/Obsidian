@@ -39,7 +39,13 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <div className="fixed inset-0 z-30 bg-obsidian-black flex flex-col items-center justify-center">
-            {/* overlay */}
+            <div className="flex flex-col items-center space-y-8">
+              {["Shop", "Story", "Source"].map((item) => (
+                <Link key={item} href={`/${item.toLowerCase()}`} className="font-playfair text-display text-cream hover:text-gold-bright transition-colors" onClick={() => setMenuOpen(false)}>
+                  {item}
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </AnimatePresence>
