@@ -2,9 +2,14 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useSpring } from "motion/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Mouse } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -27,6 +32,17 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      gsap.to(bgRef.current, {
+        yPercent: 30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.fromTo(headlineRef.current, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, delay: 0.5 });
       tl.fromTo(subheadRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=1");
@@ -37,7 +53,7 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-      <div className="absolute inset-0 -top-[20%] w-full h-[120%]">
+      <div ref={bgRef} className="absolute inset-0 -top-[20%] w-full h-[120%]">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-obsidian-black/60 via-obsidian-black/40 to-obsidian-black/90 z-10" />
