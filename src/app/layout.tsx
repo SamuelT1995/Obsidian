@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -12,6 +12,13 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
