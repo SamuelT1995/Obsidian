@@ -11,6 +11,9 @@ export default function Hero() {
         <h1 className="font-playfair text-hero font-bold tracking-widest text-cream uppercase mb-6 leading-none">
           Before The<br />World Wakes
         </h1>
+        <p className="font-cormorant italic text-headline text-parchment max-w-2xl mb-12 leading-relaxed">
+          The ritual for those who treat their morning cup the way a musician tunes their instrument.
+        </p>
       </div>
     </section>
   );
