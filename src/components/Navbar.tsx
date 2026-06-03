@@ -38,7 +38,7 @@ export default function Navbar() {
       </nav>
       <AnimatePresence>
         {menuOpen && (
-          <div className="fixed inset-0 z-30 bg-obsidian-black flex flex-col items-center justify-center">
+          <motion.div initial={{ opacity: 0, y: "-100%" }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: "-100%" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="fixed inset-0 z-30 bg-obsidian-black flex flex-col items-center justify-center">
             <div className="flex flex-col items-center space-y-8">
               {["Shop", "Story", "Source"].map((item) => (
                 <Link key={item} href={`/${item.toLowerCase()}`} className="font-playfair text-display text-cream hover:text-gold-bright transition-colors" onClick={() => setMenuOpen(false)}>
@@ -46,7 +46,7 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
