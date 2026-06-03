@@ -1,1 +1,1 @@
-// Export components here
+export { default as CustomCursor } from "./CustomCursor";
