@@ -3,3 +3,8 @@ export { default as Manifesto } from "./Manifesto";
 export { default as Origin } from "./Origin";
 export { default as Products } from "./Products";
 export { default as Process } from "./Process";
+export { default as Ritual } from "./Ritual";
+export { default as Brew } from "./Brew";
+export { default as Testimonials } from "./Testimonials";
+export { default as Newsletter } from "./Newsletter";
+export { default as Footer } from "./Footer";
