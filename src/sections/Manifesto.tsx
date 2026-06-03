@@ -8,41 +8,82 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Manifesto() {
   const containerRef = useRef<HTMLElement>(null);
   const quoteRef = useRef<HTMLHeadingElement>(null);
-  const bodyRef = useRef<HTMLParagraphElement>(null);
-  const dividerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+
+  const quoteText = "For those who refuse to dilute their ambition with mediocrity.";
+  const words = quoteText.split(" ");
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
+      // Background Parallax
+      gsap.to(bgRef.current, {
+        yPercent: 15,
+        ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 75%",
-          end: "bottom 80%",
-          toggleActions: "play none none reverse",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
         }
       });
 
-      tl.fromTo(dividerRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "power3.inOut" })
-        .fromTo(labelRef.current, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, "-=0.5")
-        .fromTo(quoteRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 }, "-=0.2")
-        .fromTo(bodyRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.6");
+      // Scrubbed word-by-word reveal
+      gsap.fromTo(".quote-word", 
+        { opacity: 0.1, color: "var(--gold-whisper)" },
+        { 
+          opacity: 1, 
+          color: "var(--cream)",
+          stagger: 0.1, 
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 60%",
+            end: "center center",
+            scrub: 1 // smooth scrubbing
+          }
+        }
+      );
+      
+      // Reveal the body text after the quote
+      gsap.fromTo(".body-text",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "center 55%",
+            end: "bottom 80%",
+            scrub: 1
+          }
+        }
+      );
+
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="py-32 md:py-48 bg-obsidian-black relative z-20 flex flex-col items-center justify-center px-6">
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-        <div className="w-full flex items-center justify-center space-x-4 mb-16">
-          <div ref={dividerRef} className="h-px bg-gold-muted w-16 origin-left" />
-          <span ref={labelRef} className="text-gold-muted font-inter tracking-[0.3em] text-micro uppercase">The Manifesto</span>
-          <div ref={dividerRef} className="h-px bg-gold-muted w-16 origin-right" />
-        </div>
-        <h2 ref={quoteRef} className="font-cormorant italic text-display text-cream leading-tight mb-12">
-          "For those who refuse to dilute<br className="hidden md:block"/> their ambition with mediocrity."
+    <section id="manifesto" ref={containerRef} className="relative py-48 overflow-hidden z-20 flex flex-col items-center justify-center px-6 min-h-[120vh]">
+      {/* Immersive Dark Background */}
+      <div ref={bgRef} className="absolute inset-0 -top-[20%] w-full h-[140%] z-0">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-20" />
+      </div>
+      
+      <div className="absolute inset-0 bg-obsidian-black/80 backdrop-blur-md z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black via-transparent to-obsidian-black z-10" />
+
+      <div className="relative max-w-4xl mx-auto flex flex-col items-center text-center z-20">
+        <span className="text-gold-muted font-inter tracking-[0.4em] text-micro uppercase mb-16 opacity-50">The Manifesto</span>
+        
+        <h2 ref={quoteRef} className="font-cormorant italic text-[clamp(32px,5vw,72px)] leading-tight mb-16 drop-shadow-xl flex flex-wrap justify-center gap-x-4">
+          {words.map((word, i) => (
+            <span key={i} className="quote-word transition-colors duration-200">
+              {word}
+            </span>
+          ))}
         </h2>
-        <p ref={bodyRef} className="font-inter text-body-lg text-parchment max-w-2xl leading-relaxed">
+        
+        <p className="body-text font-inter text-body-lg text-parchment max-w-2xl leading-relaxed font-light">
           We don't roast for the masses. We roast for the obsessive. The ones who measure their water temperature to the degree, who weigh their beans to the tenth of a gram. Obsidian is sourced from the rarest volcanic soils on earth, bringing you a cup that is dark, unforgiving, and absolutely perfect.
         </p>
       </div>

@@ -19,7 +19,7 @@ const origins = [
     name: "Huila, Colombia",
     elevation: "1,750m",
     notes: ["Dark Chocolate", "Plum", "Brown Sugar"],
-    bgImage: "https://images.unsplash.com/photo-1524350876685-274059332607?q=80&w=1000&auto=format&fit=crop"
+    bgImage: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop"
   },
   {
     id: 3,
@@ -37,27 +37,49 @@ export default function Origin() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        
+        // Staggered Deep Mask Reveal
         gsap.fromTo(
           card,
-          { opacity: 0, y: 50 },
+          { clipPath: "inset(100% 0% 0% 0%)", y: 100 },
           {
-            opacity: 1,
+            clipPath: "inset(0% 0% 0% 0%)",
             y: 0,
-            duration: 0.8,
-            ease: "power3.out",
+            duration: 1.5,
+            delay: i * 0.2,
+            ease: "power4.out",
             scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
+              trigger: containerRef.current,
+              start: "top 70%",
             }
           }
         );
+
+        // Deep Parallax for the internal text overlay
+        const content = card.querySelector('.origin-content');
+        if (content) {
+          gsap.fromTo(content, 
+            { y: 80 }, 
+            { 
+              y: -30, 
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+              }
+            }
+          );
+        }
       });
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="py-32 bg-carbon relative overflow-hidden">
+    <section id="origin" ref={containerRef} className="py-32 bg-obsidian-black relative overflow-hidden z-20">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
         <svg className="w-[150%] h-[150%]" viewBox="0 0 100 100" preserveAspectRatio="none">
            <path d="M0,50 Q25,25 50,50 T100,50" stroke="var(--gold-muted)" strokeWidth="0.2" fill="none" />
@@ -66,41 +88,41 @@ export default function Origin() {
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between">
+        <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between">
           <div>
             <span className="text-gold-muted font-inter tracking-[0.3em] text-micro uppercase mb-4 block">The Source</span>
-            <h2 className="font-playfair text-display font-bold text-cream uppercase leading-none">
+            <h2 className="font-playfair text-display font-bold text-cream uppercase leading-none drop-shadow-lg">
               Born from<br />Volcanic Ash
             </h2>
           </div>
-          <button className="group flex items-center space-x-2 text-parchment hover:text-gold-bright transition-colors mt-8 md:mt-0 pb-2 border-b border-white-10 hover:border-gold-bright">
+          <button className="group flex items-center space-x-4 text-parchment hover:text-gold-bright transition-colors mt-8 md:mt-0 pb-2 border-b border-white-10 hover:border-gold-bright">
             <span className="font-inter text-caption tracking-widest uppercase">Explore All Origins</span>
-            <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={18} className="transform group-hover:translate-x-2 transition-transform duration-300" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {origins.map((origin, i) => (
             <div 
               key={origin.id}
               ref={el => { cardsRef.current[i] = el }}
-              className="group relative h-[500px] w-full overflow-hidden border border-white-5 hover:border-gold-muted transition-colors duration-500 cursor-pointer"
+              className="group relative h-[600px] w-full overflow-hidden shadow-2xl bg-carbon"
             >
               <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] ease-out group-hover:scale-110"
                 style={{ backgroundImage: `url('${origin.bgImage}')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black via-obsidian-black/60 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-gold-bright font-inter text-micro tracking-[0.2em] uppercase block mb-2">{origin.elevation}</span>
-                  <h3 className="font-playfair text-title text-cream mb-4">{origin.name}</h3>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                    <div className="h-px w-full bg-white-10 mb-4" />
-                    <p className="font-inter text-caption text-parchment tracking-widest uppercase">
-                      {origin.notes.join(" • ")}
-                    </p>
-                  </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black via-obsidian-black/50 to-transparent opacity-90 transition-opacity duration-[2s]" />
+              
+              <div className="origin-content absolute inset-0 p-10 flex flex-col justify-end text-center z-10 pointer-events-none">
+                <span className="text-gold-bright font-inter text-micro tracking-[0.3em] uppercase block mb-4 origin-bottom transform transition-transform duration-700 group-hover:-translate-y-2">{origin.elevation}</span>
+                <h3 className="font-playfair text-[clamp(24px,3vw,36px)] text-cream mb-6 drop-shadow-xl transform transition-transform duration-700 delay-75 group-hover:-translate-y-2">{origin.name}</h3>
+                
+                <div className="overflow-hidden">
+                  <div className="h-px w-16 mx-auto bg-gold-muted/50 mb-6 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-center" />
+                  <p className="font-inter text-caption text-parchment tracking-widest uppercase opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 delay-150">
+                    {origin.notes.join(" • ")}
+                  </p>
                 </div>
               </div>
             </div>

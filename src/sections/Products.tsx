@@ -29,7 +29,7 @@ export default function Products() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-32 bg-obsidian-black relative">
+    <section id="products" ref={containerRef} className="py-32 bg-obsidian-black relative">
       <div className="container mx-auto px-6 lg:px-12">
         <div ref={titleRef} className="mb-20 text-center">
           <span className="text-gold-muted font-inter tracking-[0.3em] text-micro uppercase mb-4 block">The Collection</span>

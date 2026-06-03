@@ -59,6 +59,10 @@
   --text-body: var(--scale-body);
   --text-caption: var(--scale-caption);
   --text-micro: var(--scale-micro);
+
+  --font-inter: var(--font-inter), sans-serif;
+  --font-playfair: var(--font-playfair), serif;
+  --font-cormorant: var(--font-cormorant), serif;
 }
 
 body {

@@ -21,10 +21,14 @@ export default function Navbar() {
         <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
           <Link href="/" className="font-playfair text-2xl font-bold tracking-widest text-cream uppercase relative z-50">Obsidian</Link>
           <div className="hidden md:flex items-center space-x-12">
-            {["Shop", "Story", "Source"].map((item, i) => (
-              <Link key={item} ref={(el) => {linksRef.current[i] = el}} onMouseEnter={() => onEnter(i)} onMouseLeave={() => onLeave(i)} href={`/${item.toLowerCase()}`} className="font-inter text-caption uppercase tracking-widest text-cream relative">
-                {item}
-              </Link>
+            {[
+              { name: "Shop", href: "#products" },
+              { name: "Story", href: "#manifesto" },
+              { name: "Source", href: "#origin" }
+            ].map((item, i) => (
+              <a key={item.name} ref={(el) => {linksRef.current[i] = el}} onMouseEnter={() => onEnter(i)} onMouseLeave={() => onLeave(i)} href={item.href} className="font-inter text-caption uppercase tracking-widest text-cream relative">
+                {item.name}
+              </a>
             ))}
           </div>
           <div className="hidden md:flex items-center space-x-6 text-cream">
@@ -40,11 +44,15 @@ export default function Navbar() {
         {menuOpen && (
           <motion.div initial={{ opacity: 0, y: "-100%" }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: "-100%" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="fixed inset-0 z-30 bg-obsidian-black flex flex-col items-center justify-center">
             <div className="flex flex-col items-center space-y-8">
-              {["Shop", "Story", "Source"].map((item, i) => (
-                <motion.div key={item} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}>
-                  <Link href={`/${item.toLowerCase()}`} className="font-playfair text-display text-cream hover:text-gold-bright transition-colors" onClick={() => setMenuOpen(false)}>
-                    {item}
-                  </Link>
+              {[
+                { name: "Shop", href: "#products" },
+                { name: "Story", href: "#manifesto" },
+                { name: "Source", href: "#origin" }
+              ].map((item, i) => (
+                <motion.div key={item.name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}>
+                  <a href={item.href} className="font-playfair text-display text-cream hover:text-gold-bright transition-colors" onClick={() => setMenuOpen(false)}>
+                    {item.name}
+                  </a>
                 </motion.div>
               ))}
             </div>
