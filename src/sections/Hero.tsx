@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useSpring } from "motion/react";
 import gsap from "gsap";
+import { Mouse } from "lucide-react";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -60,6 +61,13 @@ export default function Hero() {
           </motion.button>
         </div>
       </div>
+      <motion.div 
+        className="absolute bottom-10 z-20 text-cream"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+      >
+        <Mouse size={24} strokeWidth={1.5} />
+      </motion.div>
     </section>
   );
 }
