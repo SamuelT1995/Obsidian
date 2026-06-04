@@ -16,33 +16,31 @@ export default function Ritual() {
     const ctx = gsap.context(() => {
       // Zoom-in transition for the entire cream section
       gsap.fromTo(wrapperRef.current, 
-        { scale: 0.3, borderRadius: "100vw", opacity: 0 },
+        { scale: 0.3, borderRadius: "50vw", opacity: 0 },
         { 
           scale: 1, 
           borderRadius: "0px",
           opacity: 1,
-          ease: "power2.out",
+          ease: "power2.inOut",
           scrollTrigger: { 
             trigger: containerRef.current, 
             start: "top bottom", 
-            end: "top top", 
+            end: "center center", 
             scrub: 1
           }
         }
       );
 
-      // Scrubbed word-by-word reveal
+      // Scrubbed word-by-word reveal (No bounce, no transparency change)
       gsap.fromTo(".ritual-word", 
-        { opacity: 0.1, y: 30, color: "var(--carbon)" },
+        { color: "rgba(0,0,0,0.15)" },
         { 
-          opacity: 1, 
-          y: 0,
           color: "var(--obsidian-black)",
           stagger: 0.1, 
           scrollTrigger: { 
             trigger: containerRef.current, 
-            start: "top 40%", 
-            end: "center center", 
+            start: "center 70%", 
+            end: "center 30%", 
             scrub: true
           }
         }
