@@ -8,14 +8,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
+  const skyRef = useRef<HTMLDivElement>(null);
+  const farmRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Gentle parallax on background — moves slower than scroll
-      gsap.to(bgRef.current, {
-        yPercent: 20,
+      // Sky/clouds layer — moves VERY slow (deep background)
+      gsap.to(skyRef.current, {
+        yPercent: 8,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -25,24 +26,37 @@ export default function Hero() {
         }
       });
 
-      // Text fades and blurs as you scroll away from hero
+      // Farm layer — moves slightly faster (foreground parallax)
+      gsap.to(farmRef.current, {
+        yPercent: 25,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+      // Text floats up and fades as you scroll
       gsap.to(contentRef.current, {
         opacity: 0,
-        y: -80,
-        filter: "blur(8px)",
+        y: -100,
+        filter: "blur(6px)",
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "bottom top",
+          end: "80% top",
           scrub: true,
         }
       });
 
-      // Entrance animation on page load
+      // Entrance animation
       const loadTl = gsap.timeline({ defaults: { ease: "power4.out" } });
-      loadTl.fromTo(bgRef.current, { scale: 1.15 }, { scale: 1, duration: 2.5 });
-      loadTl.fromTo(".hero-title", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8 }, "-=2");
+      loadTl.fromTo(skyRef.current, { scale: 1.1 }, { scale: 1, duration: 3 });
+      loadTl.fromTo(farmRef.current, { scale: 1.15, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.5 }, "-=2.5");
+      loadTl.fromTo(".hero-title", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8 }, "-=1.5");
       loadTl.fromTo(".hero-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5 }, "-=1.2");
       loadTl.fromTo(".hero-cta", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2 }, "-=1");
     }, containerRef);
@@ -51,27 +65,42 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-obsidian-black">
-      {/* Background — contained inside the section, NOT fixed */}
-      <div className="absolute inset-0 -top-[10%] w-full h-[130%] z-0 overflow-hidden">
+      
+      {/* Layer 1: Sky & Clouds — deep background, slow parallax */}
+      <div className="absolute inset-0 -top-[5%] w-full h-[115%] z-0 overflow-hidden">
         <div 
-          ref={bgRef} 
-          className="absolute inset-0 will-change-transform origin-center"
+          ref={skyRef} 
+          className="absolute inset-0 will-change-transform"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1611070257405-25e63ad1c337?q=80&w=2400&auto=format&fit=crop')`,
+            backgroundImage: `url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=2400&auto=format&fit=crop')`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundPosition: 'top center',
           }}
         />
       </div>
 
-      {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-obsidian-black/60 via-obsidian-black/40 to-obsidian-black z-10 pointer-events-none" />
+      {/* Layer 2: Coffee Farm — foreground, faster parallax for depth */}
+      <div className="absolute inset-0 -top-[10%] w-full h-[130%] z-[2] overflow-hidden">
+        <div 
+          ref={farmRef} 
+          className="absolute inset-0 will-change-transform"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1595981234058-a9302fb97229?q=80&w=2400&auto=format&fit=crop')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'bottom center',
+          }}
+        />
+      </div>
+
+      {/* Gradient overlays for text readability and cinematic mood */}
+      <div className="absolute inset-0 bg-gradient-to-b from-obsidian-black/50 via-transparent to-obsidian-black z-[3] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black/70 via-transparent to-transparent z-[3] pointer-events-none" />
       
-      {/* Film grain */}
-      <div className="absolute inset-0 z-10 opacity-25 mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      {/* Film grain texture */}
+      <div className="absolute inset-0 z-[3] opacity-20 mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
       {/* Hero Content */}
-      <div ref={contentRef} className="relative z-20 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto will-change-transform">
+      <div ref={contentRef} className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto will-change-transform">
         <h1 className="hero-title font-playfair text-[clamp(40px,6vw,90px)] font-bold tracking-[0.1em] text-cream uppercase mb-8 leading-tight drop-shadow-2xl">
           Before The<br className="md:hidden" /> World Wakes
         </h1>

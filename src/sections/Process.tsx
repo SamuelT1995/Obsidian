@@ -34,40 +34,31 @@ const steps = [
 
 export default function Process() {
   const containerRef = useRef<HTMLElement>(null);
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const scrollWidth = scrollWrapperRef.current?.scrollWidth || window.innerWidth * 4;
-      const windowWidth = window.innerWidth;
+      if (!trackRef.current || !containerRef.current) return;
 
-      // Pin the section and scroll horizontally
-      gsap.to(scrollWrapperRef.current, {
-        x: -(scrollWidth - windowWidth),
+      const totalPanels = steps.length;
+      const panelWidth = window.innerWidth;
+      const totalScroll = panelWidth * (totalPanels - 1); // We only scroll (n-1) panels
+
+      gsap.to(trackRef.current, {
+        x: -totalScroll,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           pin: true,
           pinType: "transform",
-          pinSpacing: true,
-          scrub: 1,
+          scrub: 0.8,
           anticipatePin: 1,
-          end: () => "+=" + (scrollWidth - windowWidth)
+          // The scroll distance matches exactly the panels we need to move
+          end: () => "+=" + totalScroll,
+          // Prevents the shake by disabling fast scrolling overcompensation
+          fastScrollEnd: true,
+          preventOverlaps: true,
         }
-      });
-      
-      // Image scale effect within the horizontal scroll
-      gsap.utils.toArray(".process-image").forEach((img: any) => {
-        gsap.to(img, {
-          scale: 1.1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            scrub: true,
-            start: "top top",
-            end: () => "+=" + scrollWidth
-          }
-        });
       });
 
     }, containerRef);
@@ -75,39 +66,51 @@ export default function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} className="bg-carbon overflow-hidden h-screen flex flex-col">
-      <div className="absolute top-12 left-6 lg:left-12 z-20">
+    <section ref={containerRef} className="relative bg-carbon overflow-hidden" style={{ height: '100vh' }}>
+      {/* Section header — positioned absolute so it's always visible */}
+      <div className="absolute top-8 left-8 lg:left-16 z-20 pointer-events-none">
         <span className="text-gold-bright font-inter tracking-[0.4em] text-micro uppercase block">The Process</span>
-        <h2 className="font-playfair text-[clamp(24px,3vw,48px)] font-bold text-cream uppercase leading-none drop-shadow-xl mt-4">An Obsessive Pursuit</h2>
+        <h2 className="font-playfair text-[clamp(20px,2.5vw,40px)] font-bold text-cream uppercase leading-none drop-shadow-xl mt-3">An Obsessive Pursuit</h2>
       </div>
 
-      <div ref={scrollWrapperRef} className="flex h-full w-[400vw] items-center">
+      {/* Horizontal scrolling track */}
+      <div 
+        ref={trackRef} 
+        className="flex h-full will-change-transform"
+        style={{ width: `${steps.length * 100}vw` }}
+      >
         {steps.map((step) => (
-          <div key={step.id} className="w-[100vw] h-full flex flex-col justify-center px-12 md:px-24 relative overflow-hidden group">
-            
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30vw] font-playfair font-bold text-white-5 select-none pointer-events-none z-0 tracking-tighter opacity-50">
+          <div 
+            key={step.id} 
+            className="flex items-center justify-center px-8 md:px-16 lg:px-24 relative group"
+            style={{ width: '100vw', height: '100vh', flexShrink: 0 }}
+          >
+            {/* Giant background number */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-playfair font-bold text-white/[0.03] select-none pointer-events-none z-0 leading-none">
               {step.id}
             </div>
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-16 md:gap-32 w-full max-w-6xl mx-auto">
-              <div className="w-full md:w-1/2 overflow-hidden shadow-2xl aspect-[4/5] border border-white-10 relative">
+            {/* Content: image + text side by side, properly sized */}
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 md:gap-20 w-full max-w-5xl mx-auto">
+              {/* Image */}
+              <div className="w-full md:w-[45%] overflow-hidden shadow-2xl border border-white/10 relative flex-shrink-0" style={{ aspectRatio: '3/4', maxHeight: '65vh' }}>
                 <img 
                   src={step.image} 
                   alt={step.title} 
-                  className="process-image absolute inset-0 w-full h-full object-cover grayscale-[50%] group-hover:grayscale-0 transition-all duration-1000"
+                  className="absolute inset-0 w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black/80 via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black/70 via-transparent to-transparent" />
               </div>
               
-              <div className="w-full md:w-1/2 backdrop-blur-md bg-carbon/50 p-10 border border-white-5 rounded-sm">
-                <span className="font-inter text-gold-bright tracking-widest uppercase text-micro block mb-6">Phase {step.id}</span>
-                <h3 className="font-playfair text-[clamp(32px,4vw,56px)] text-cream mb-8 drop-shadow-md">{step.title}</h3>
-                <p className="font-inter text-[clamp(16px,1.5vw,20px)] text-parchment leading-relaxed font-light">
+              {/* Text */}
+              <div className="w-full md:w-[55%] p-6 md:p-10">
+                <span className="font-inter text-gold-bright tracking-widest uppercase text-micro block mb-5">Phase {step.id}</span>
+                <h3 className="font-playfair text-[clamp(28px,3.5vw,48px)] text-cream mb-6 drop-shadow-md leading-tight">{step.title}</h3>
+                <p className="font-inter text-[clamp(14px,1.2vw,18px)] text-parchment leading-relaxed font-light max-w-md">
                   {step.desc}
                 </p>
               </div>
             </div>
-
           </div>
         ))}
       </div>
