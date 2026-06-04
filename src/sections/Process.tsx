@@ -21,7 +21,7 @@ const steps = [
   { 
     id: "03", 
     title: "Roasting", 
-    desc: "Our cast-iron roasters apply aggressive heat curves to develop deep, complex sugars without turning to ash. It is a violent, beautiful process.",
+    desc: "Our cast-iron roasters apply aggressive heat curves to develop deep, complex sugars without turning to ash.",
     image: "https://images.unsplash.com/photo-1611162458324-aae1eb4129a4?q=80&w=1000&auto=format&fit=crop"
   },
   { 
@@ -40,24 +40,18 @@ export default function Process() {
     const ctx = gsap.context(() => {
       if (!trackRef.current || !containerRef.current) return;
 
-      const totalPanels = steps.length;
-      const panelWidth = window.innerWidth;
-      const totalScroll = panelWidth * (totalPanels - 1); // We only scroll (n-1) panels
+      const panels = gsap.utils.toArray<HTMLElement>(".process-panel");
+      const totalDistance = (panels.length - 1) * window.innerWidth;
 
       gsap.to(trackRef.current, {
-        x: -totalScroll,
+        x: () => -totalDistance,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           pin: true,
-          pinType: "transform",
-          scrub: 0.8,
-          anticipatePin: 1,
-          // The scroll distance matches exactly the panels we need to move
-          end: () => "+=" + totalScroll,
-          // Prevents the shake by disabling fast scrolling overcompensation
-          fastScrollEnd: true,
-          preventOverlaps: true,
+          scrub: 0.5,
+          end: () => "+=" + totalDistance,
+          invalidateOnRefresh: true,
         }
       });
 
@@ -66,47 +60,44 @@ export default function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative bg-carbon overflow-hidden" style={{ height: '100vh' }}>
-      {/* Section header — positioned absolute so it's always visible */}
+    <section ref={containerRef} className="bg-carbon h-screen overflow-hidden relative">
+      {/* Section header */}
       <div className="absolute top-8 left-8 lg:left-16 z-20 pointer-events-none">
         <span className="text-gold-bright font-inter tracking-[0.4em] text-micro uppercase block">The Process</span>
         <h2 className="font-playfair text-[clamp(20px,2.5vw,40px)] font-bold text-cream uppercase leading-none drop-shadow-xl mt-3">An Obsessive Pursuit</h2>
       </div>
 
-      {/* Horizontal scrolling track */}
-      <div 
-        ref={trackRef} 
-        className="flex h-full will-change-transform"
-        style={{ width: `${steps.length * 100}vw` }}
-      >
+      {/* Horizontal track */}
+      <div ref={trackRef} className="flex items-center h-full will-change-transform">
         {steps.map((step) => (
           <div 
             key={step.id} 
-            className="flex items-center justify-center px-8 md:px-16 lg:px-24 relative group"
-            style={{ width: '100vw', height: '100vh', flexShrink: 0 }}
+            className="process-panel flex-none w-screen h-screen flex items-center justify-center px-8 md:px-20 relative group"
           >
             {/* Giant background number */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-playfair font-bold text-white/[0.03] select-none pointer-events-none z-0 leading-none">
-              {step.id}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+              <span className="text-[25vw] font-playfair font-bold text-white/[0.03] leading-none">
+                {step.id}
+              </span>
             </div>
 
-            {/* Content: image + text side by side, properly sized */}
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 md:gap-20 w-full max-w-5xl mx-auto">
-              {/* Image */}
-              <div className="w-full md:w-[45%] overflow-hidden shadow-2xl border border-white/10 relative flex-shrink-0" style={{ aspectRatio: '3/4', maxHeight: '65vh' }}>
+            {/* Card content — image left, text right, everything constrained to 50vh max */}
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 md:gap-16 w-full max-w-5xl mx-auto">
+              {/* Image — constrained height so it never overflows */}
+              <div className="w-full md:w-[40%] flex-shrink-0 h-[45vh] overflow-hidden shadow-2xl border border-white/10 relative">
                 <img 
                   src={step.image} 
                   alt={step.title} 
                   className="absolute inset-0 w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black/60 via-transparent to-transparent" />
               </div>
               
               {/* Text */}
-              <div className="w-full md:w-[55%] p-6 md:p-10">
-                <span className="font-inter text-gold-bright tracking-widest uppercase text-micro block mb-5">Phase {step.id}</span>
-                <h3 className="font-playfair text-[clamp(28px,3.5vw,48px)] text-cream mb-6 drop-shadow-md leading-tight">{step.title}</h3>
-                <p className="font-inter text-[clamp(14px,1.2vw,18px)] text-parchment leading-relaxed font-light max-w-md">
+              <div className="w-full md:w-[60%]">
+                <span className="font-inter text-gold-bright tracking-widest uppercase text-micro block mb-4">Phase {step.id}</span>
+                <h3 className="font-playfair text-[clamp(28px,3.5vw,48px)] text-cream mb-5 drop-shadow-md leading-tight">{step.title}</h3>
+                <p className="font-inter text-[clamp(14px,1.1vw,17px)] text-parchment leading-relaxed font-light max-w-md">
                   {step.desc}
                 </p>
               </div>

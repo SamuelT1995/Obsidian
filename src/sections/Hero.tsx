@@ -100,7 +100,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-[3] opacity-20 mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
       {/* Hero Content */}
-      <div ref={contentRef} className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto will-change-transform">
+      <div ref={contentRef} className="relative z-[5] flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto will-change-transform">
         <h1 className="hero-title font-playfair text-[clamp(40px,6vw,90px)] font-bold tracking-[0.1em] text-cream uppercase mb-8 leading-tight drop-shadow-2xl">
           Before The<br className="md:hidden" /> World Wakes
         </h1>
