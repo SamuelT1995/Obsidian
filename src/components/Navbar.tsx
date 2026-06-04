@@ -13,8 +13,8 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const onEnter = (i) => gsap.to(linksRef.current[i], { color: "var(--gold-bright)", duration: 0.3 });
-  const onLeave = (i) => gsap.to(linksRef.current[i], { color: "var(--cream)", duration: 0.3 });
+  const onEnter = (i: number) => gsap.to(linksRef.current[i], { color: "var(--gold-bright)", duration: 0.3 });
+  const onLeave = (i: number) => gsap.to(linksRef.current[i], { color: "var(--cream)", duration: 0.3 });
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${scrolled ? "bg-obsidian-black/80 backdrop-blur-md py-4 border-b border-white-5" : "bg-transparent py-6"}`}>
