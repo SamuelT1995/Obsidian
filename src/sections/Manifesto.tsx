@@ -29,10 +29,10 @@ export default function Manifesto() {
 
       // Scrubbed word-by-word reveal
       gsap.fromTo(".quote-word", 
-        { opacity: 0.1, color: "var(--carbon)" },
+        { opacity: 0.1, color: "var(--gold-whisper)" },
         { 
           opacity: 1, 
-          color: "var(--obsidian-black)",
+          color: "var(--cream)",
           stagger: 0.1, 
           scrollTrigger: {
             trigger: containerRef.current,
@@ -64,18 +64,18 @@ export default function Manifesto() {
 
   return (
     <section id="manifesto" ref={containerRef} className="relative py-48 overflow-hidden z-20 flex flex-col items-center justify-center px-6 min-h-[120vh]">
-      {/* Immersive Light Background */}
+      {/* Immersive Dark Background */}
       <div ref={bgRef} className="absolute inset-0 -top-[20%] w-full h-[140%] z-0">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-10" />
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-20" />
       </div>
       
-      <div className="absolute inset-0 bg-parchment/95 backdrop-blur-sm z-10" />
-      <div className="absolute inset-0 bg-gradient-to-t from-parchment via-transparent to-parchment z-10" />
+      <div className="absolute inset-0 bg-obsidian-black/80 backdrop-blur-md z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-black via-transparent to-obsidian-black z-10" />
 
       <div className="relative max-w-4xl mx-auto flex flex-col items-center text-center z-20">
-        <span className="text-gold-muted font-inter tracking-[0.4em] text-micro uppercase mb-16 opacity-80">The Manifesto</span>
+        <span className="text-gold-muted font-inter tracking-[0.4em] text-micro uppercase mb-16 opacity-50">The Manifesto</span>
         
-        <h2 ref={quoteRef} className="font-cormorant italic text-[clamp(32px,5vw,72px)] leading-tight mb-16 drop-shadow-sm flex flex-wrap justify-center gap-x-4">
+        <h2 ref={quoteRef} className="font-cormorant italic text-[clamp(32px,5vw,72px)] leading-tight mb-16 drop-shadow-xl flex flex-wrap justify-center gap-x-4">
           {words.map((word, i) => (
             <span key={i} className="quote-word transition-colors duration-200">
               {word}
@@ -83,7 +83,7 @@ export default function Manifesto() {
           ))}
         </h2>
         
-        <p className="body-text font-inter text-body-lg text-carbon max-w-2xl leading-relaxed font-light">
+        <p className="body-text font-inter text-body-lg text-parchment max-w-2xl leading-relaxed font-light">
           We don't roast for the masses. We roast for the obsessive. The ones who measure their water temperature to the degree, who weigh their beans to the tenth of a gram. Obsidian is sourced from the rarest volcanic soils on earth, bringing you a cup that is dark, unforgiving, and absolutely perfect.
         </p>
       </div>

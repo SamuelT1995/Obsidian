@@ -85,7 +85,7 @@ export default function Hero() {
           ref={farmRef} 
           className="absolute inset-0 will-change-transform"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1595981234058-a9302fb97229?q=80&w=2400&auto=format&fit=crop')`,
+            backgroundImage: `url('/hero-farm.png')`,
             backgroundSize: 'cover',
             backgroundPosition: 'bottom center',
           }}
