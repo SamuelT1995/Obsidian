@@ -41,7 +41,7 @@ export default function Products() {
       <div className="container mx-auto px-6 lg:px-12">
         <div ref={titleRef} className="mb-20 text-center">
           <span className="text-gold-muted font-inter tracking-[0.3em] text-micro uppercase mb-4 block">The Collection</span>
-          <h2 className="font-playfair text-display font-bold text-cream uppercase leading-none">Unforgivingly Dark</h2>
+          <h2 className="font-playfair text-display font-bold text-cream uppercase leading-none">Curated Offerings</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -14,8 +14,8 @@ const steps = [
   },
   { 
     id: "02", 
-    title: "Relationship", 
-    desc: "Direct trade isn't a buzzword. We know the farmers, their families, and the exact slope where our beans are harvested.",
+    title: "Processing", 
+    desc: "The cherries are meticulously washed, fermented, and sun-dried on raised beds to ensure an immaculate, clean profile before shipping.",
     image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1000&auto=format&fit=crop"
   },
   { 
