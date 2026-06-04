@@ -21,7 +21,10 @@ export default function Hero() {
           start: "top top",
           end: "+=150%",
           pin: true,
+          pinType: "transform",
+          pinSpacing: true,
           scrub: 1,
+          anticipatePin: 1,
         }
       });
 

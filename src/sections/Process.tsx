@@ -48,7 +48,10 @@ export default function Process() {
         scrollTrigger: {
           trigger: containerRef.current,
           pin: true,
-          scrub: 1, // smooth scrubbing
+          pinType: "transform",
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 1,
           end: () => "+=" + (scrollWidth - windowWidth)
         }
       });
